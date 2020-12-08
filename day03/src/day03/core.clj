@@ -34,6 +34,14 @@
   [s]
   (walk-slope 0 s 3))
 
+(defn walk-slope-set
+  [forest]
+  (let [slopes [[1,1] [3,1] [5,1] [7,1] [1,2]]]
+    (map (fn [slope] (walk-slope 0 (take-nth (second slope) forest) (first slope))) slopes)))
+
+(defn part2
+  [f]
+  (reduce * 1 (walk-slope-set f)))
 
 (defn -main
   "AOC Day 3 entrypoint"
@@ -43,5 +51,6 @@
     (->> args
          first
          get-data
-         part1
+         ;;part1
+         part2
          println)))
