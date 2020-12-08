@@ -48,7 +48,7 @@
   (count (filter toboggan-policy entries)))
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "AOC Day 2 entrypoint"
   [& args]
   (if (empty? args)
     (println "Expected a path to the input file")
