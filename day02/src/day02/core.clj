@@ -28,9 +28,24 @@
           counter
           nil)))))
 
+(defn toboggan-policy
+  "checks if given string fulfills toboggan password policy"
+  [s]
+  (let [components (string/split s #"\s")]
+    (let [rang (get-range (first components))
+          character (first (second components))
+          password (second (next components))]
+      (if (= character (nth password (- (first rang) 1) ))
+        (not (= character (nth password (- (second rang) 1) "password too short")))
+        (= character (nth password (- (second rang) 1) "password too short"))))))
+
 (defn part1
   [entries]
   (count (filter password-policy entries)))
+
+(defn part2
+  [entries]
+  (count (filter toboggan-policy entries)))
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -40,6 +55,7 @@
     (->> args
          first
          input-password
-         part1
+         ;;part1
+         part2
          println)))
 
