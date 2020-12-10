@@ -25,10 +25,22 @@
   [answers]
   (count (distinct (apply concat answers))))
 
+(defn remove-answers
+  "remove answers from first form that the second form does not have"
+  [form other]
+  (reduce (fn [x y] (if (some #(= y %) other)
+                      (str x y)
+                      x))
+          ""
+          form))
+
 (defn part1
   [data]
   (reduce (fn [x y] (+ x (count-answers y))) 0 data))
 
+(defn part2
+  [data]
+  (reduce (fn [x y] (+ x (count (reduce remove-answers (map distinct y))))) 0 data))
 
 (defn -main
   "AOC Day 6 entrypoint"
@@ -38,5 +50,6 @@
     (->> args
          first
          get-data
-         part1
+         ;;part1
+         part2
          println)))
