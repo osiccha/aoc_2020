@@ -39,7 +39,8 @@
     (case (first instruct)
       :acc [(+ line 1) (+ accum value) game]
       :jmp [(+ line value) accum game]
-      :nop [(+ line 1) accum game])))
+      :nop [(+ line 1) accum game]
+      nil [line accum game])))
 
 (defn search-loop
   [game]
@@ -48,15 +49,34 @@
          visited []]
     (if (in? visited
              line)
-      accum
+      [accum line]
       (let [state (do-line line accum game)]
         (recur (first state)
                (second state)
                (conj visited line))))))
 
+(defn switch-inst
+  "switches specified line around"
+  [game line]
+  (let [instruction (get game line)]
+    (case (first instruction)
+      :jmp (assoc game line [:nop (second instruction)])
+      :nop (assoc game line [:jmp (second instruction)])
+      nil)))
+
 (defn part1
   [data]
   (search-loop (construct-game-map data)))
+
+(defn part2
+  [data]
+  (let [origin (construct-game-map data)
+        all-games (for [x (range 0 (count origin))]
+                    (switch-inst origin x))]
+    (filter #(= (second %) (count origin))
+            (map search-loop
+                 (filter (fn [y] (not (nil? y)))
+                         all-games)))))
 
 (defn -main
   "AOC Day 8 entrypoint"
@@ -66,5 +86,6 @@
     (->> args
          first
          get-data
-         part1
+         ;;part1
+         part2
          println)))
