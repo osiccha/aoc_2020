@@ -51,9 +51,31 @@
         "*" (eval-expr (conj (next right) (* left (eval-expr (first right)))))
         left))))
 
+(defn add-layer
+  [layer]
+  (if (= (count layer) 1)
+    layer
+    (let [current [(first layer) (second layer)]
+          others (next (next layer))]
+      (if (= (second layer) "*")
+        (concat current
+                (add-layer others))
+        (add-layer (concat [(conj current (first others))]
+                           (next others)))))))
+
+(defn add-precedence
+  [expr]
+  (if (or (int? expr) (string? expr))
+    expr
+    (add-layer (map add-precedence expr))))
+
 (defn part1
   [data]
   (reduce + (map #(eval-expr (apply set-brackets (conj  % []))) data)))
+
+(defn part2
+  [data]
+  (reduce + (map #(eval-expr (add-precedence (apply set-brackets (conj  % [])))) data)))
 
 (defn -main
   "AOC Day 18 entrypoint"
@@ -63,5 +85,6 @@
     (->> args
          first
          get-data
-         part1
+         ;;part1
+         part2
          println)))
