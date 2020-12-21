@@ -7,7 +7,7 @@
   (:gen-class))
 
 (defn get-data
-  "read custom forms answers"
+  "read xmas-data"
   [f]
   (let [data (-> f
                  slurp
@@ -16,6 +16,7 @@
     (map #(Long/parseLong %) data)))
 
 (defn check-xmas
+  "check if current integer matches xmas rule for previous entries"
   [current previous]
   (if (< (count previous) 25)
      true
@@ -28,6 +29,7 @@
 
 (defn contigous-set
   [numbers]
+  "calculate all sums of first i-th entries starting at i=2"
   (reduce #(conj %1
                  (+' %2 (first %1)))
           (seq [(+ (first numbers) (second numbers))])
