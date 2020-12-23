@@ -67,7 +67,7 @@
 
 (defn part1
   []
-  (println (loop-operation [nil 8 3 1 6 7 5 2 9 4] 3 100)))
+  (println (loop-operation [nil 8 3 1 6 7 5 2 9 4] 3 100 9)))
 
 (defn part2
   []
